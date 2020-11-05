@@ -55,4 +55,5 @@ var validMountainArray = function (A) {
     //判断两个数组是否有序且不重复
     return isOrder(leftA, true) && isOrder(rightA, false)
 };
+//潘小安 2020.11.02日
 

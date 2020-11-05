@@ -29,3 +29,4 @@ var intersection = function (nums1, nums2) {
     }
     return Object.keys(result)
 }
+//潘小安 2020.11.03日

@@ -31,4 +31,4 @@ var minPatches = function (nums, n) {
     }
     return count
 };
-minPatches([2, 2, 10], 100)
+minPatches([100], 1000)

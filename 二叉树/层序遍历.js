@@ -1,19 +1,41 @@
-//二叉树的层序遍历最先想到的就是BFS（广度优先搜索）思想
-//需要用队列和递归去处理
-function BFC(root) {
-    //初始化一个队列来保存
-    const queue = []
-    while (queue.length) {
-        const top = queue[0]
-        //拿值
-        console.log(top.value)
-        if (top.left) {
-            queue.push(top.left)
-        }
-        if (top.right) {
-            queue.push(top.right)
-        }
-        queue.shift()//访问结束，队头元素出列
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number[][]}
+ */
+let obj={
+    val:1,
+    left:{
+        val:2
+    },
+    right:{
+        val:3
     }
-
 }
+ var levelOrder = function(root) {
+    let result=[]
+    let queue=[]
+    if(!root){
+        return []
+    }
+    queue.push(root)
+    while(queue.length>0){
+        result.push([])
+        let queuelength=queue.length
+        for(let i=0;i<queuelength;i++){
+            result[result.length-1].push(queue[i].val)
+            !!queue[i].left&&queue.push(queue[i].left)
+            !!queue[i].right&&queue.push(queue[i].right)
+        }
+        queue.splice(0,queuelength)
+    }
+    return result
+};
+levelOrder(obj)

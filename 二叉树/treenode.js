@@ -47,8 +47,27 @@ function preoroder(root) {
     //遍历右子树
     preoroder(root.right)
 }
+//先序遍历的迭代法
+function preorderTraversal(root) {
+    const result = []
+    //利用栈来辅助得到结果
+    const stack = []
+    if (!root) {
+        return result
+    }
+    stack.push(root)
+    while (stack.length) {
+        const cur = stack.pop()
+        result.push(cur.val)
+        //栈后进先出，所先把所有的右子树入栈
+        cur.right && stack.push(cur.right)
+        cur.lef && stack.push(cur.left)
+    }
+    return result
+}
 
-// 先序遍历
+
+// 中序遍历
 function inorder(root) {
     if (!root) {
         return
@@ -60,20 +79,57 @@ function inorder(root) {
     //遍历右子树
     inorder(root.right)
 }
+//中序遍历的迭代法
+function inorderTraversal(root) {
+    if (!root) {
+        return [];
+    }
+
+    const result = [];
+    const stack = [];
+
+    while (root !== null || stack.length > 0) {
+        //把所有的左子树按照层级放进stach中
+
+        while (root) {
+            stack.push(root);
+            root = root.left;
+        }
+
+        const pop = stack.pop();
+        result.push(pop.val);
+        root = pop.right;
+    }
+
+    return result;
+};
 
 //后序遍历
 function postorder(root) {
     // 递归边界，root 为空
-    if(!root) {
-        return 
+    if (!root) {
+        return
     }
-     
+
     // 递归遍历左子树 
-    postorder(root.left)  
+    postorder(root.left)
     // 递归遍历右子树  
     postorder(root.right)
     // 输出当前遍历的结点值
-    console.log('后序遍历 当前遍历的结点值是：', root.val)  
+    console.log('后序遍历 当前遍历的结点值是：', root.val)
+}
+//后序遍历的迭代法
+//后序遍历就是前序遍历的一个逆序
+//
+function preorderTraversal(root) {
+    const res = [], stack = []
+    while (root || stack.length) {
+        res.unshift(root.val)
+        root.left && stack.push(root.left)
+        root.right && stack.push(root.right)
+        root = stack.pop()
+    }
+    return res
 }
 // inorder(root)
 postorder(root)

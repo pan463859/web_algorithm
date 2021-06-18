@@ -25,6 +25,7 @@ let obj={
     if(!root){
         return []
     }
+
     queue.push(root)
     while(queue.length>0){
         result.push([])
@@ -36,6 +37,8 @@ let obj={
         }
         queue.splice(0,queuelength)
     }
+
+    
     return result
 };
 levelOrder(obj)

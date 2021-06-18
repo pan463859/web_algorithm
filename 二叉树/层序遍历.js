@@ -36,7 +36,6 @@ let obj={
         }
         queue.splice(0,queuelength)
     }
-
     return result
 };
 levelOrder(obj)

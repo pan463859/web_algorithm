@@ -25,7 +25,6 @@ let obj={
     if(!root){
         return []
     }
-
     queue.push(root)
     while(queue.length>0){
         result.push([])

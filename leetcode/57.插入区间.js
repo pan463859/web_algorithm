@@ -14,6 +14,37 @@
 输出：[[1,2],[3,10],[12,16]]
 解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。
  */
+
+function insert(intervals, newInterval) {
+    const res = [];
+    let i = 0;
+    const len = intervals.length;
+
+    while (i < len && intervals[i][1] < newInterval[0]) { // 当前遍历的是蓝左边的，不重叠的区间
+        res.push(intervals[i]);
+        i++;
+    }
+    if (i < len && intervals[i][0] <= newInterval[1]) {
+        newInterval[0] = Math.min(newInterval[0], intervals[i][0]); //左端取较小者，更新给兰区间的左端
+    }
+    while (i < len && intervals[i][0] <= newInterval[1]) { // 当前遍历是有重叠的区间
+        newInterval[1] = Math.max(newInterval[1], intervals[i][1]); //右端取较大者，更新给兰区间的右端
+        i++;
+    }
+    res.push(newInterval); // 循环结束后，兰区间为合并后的区间，推入res
+
+    while (i < len) {                 // 在蓝右边，没重叠的区间
+        res.push(intervals[i]);
+        i++;
+    }
+
+    return res;
+}
+//使用链表尝试了很久，奈何边界条件太多
+//以后有机会再尝试用链表试试 
+//通过代码参考精选评论，在基础上改进了一下
+//2020.11.05 潘小安
+//2020.11.04的每日一题
 //乍看题目是二维数组，可能要用到两层循环，但是每个子数组是固定的两个数，且排好了序列
 /**
  * 1.0
@@ -122,33 +153,3 @@
 //     }
 //     return resultarr
 // };
-function insert(intervals, newInterval) {
-    const res = [];
-    let i = 0;
-    const len = intervals.length;
-
-    while (i < len && intervals[i][1] < newInterval[0]) { // 当前遍历的是蓝左边的，不重叠的区间
-        res.push(intervals[i]);
-        i++;
-    }
-    if (i < len && intervals[i][0] <= newInterval[1]) {
-        newInterval[0] = Math.min(newInterval[0], intervals[i][0]); //左端取较小者，更新给兰区间的左端
-    }
-    while (i < len && intervals[i][0] <= newInterval[1]) { // 当前遍历是有重叠的区间
-        newInterval[1] = Math.max(newInterval[1], intervals[i][1]); //右端取较大者，更新给兰区间的右端
-        i++;
-    }
-    res.push(newInterval); // 循环结束后，兰区间为合并后的区间，推入res
-
-    while (i < len) {                 // 在蓝右边，没重叠的区间
-        res.push(intervals[i]);
-        i++;
-    }
-
-    return res;
-}
-//使用链表尝试了很久，奈何边界条件太多
-//以后有机会再尝试用链表试试 
-//通过代码参考精选评论，在基础上改进了一下
-//2020.11.05 潘小安
-//2020.11.04的每日一题

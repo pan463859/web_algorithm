@@ -13,10 +13,22 @@
 let obj={
     val:1,
     left:{
-        val:2
+        val:2,
+        left:{
+            val:4
+        },
+        right:{
+            val:5
+        }
     },
     right:{
-        val:3
+        val:3,
+        left:{
+            val:6
+        },
+        right:{
+            val:7
+        }
     }
 }
  var levelOrder = function(root) {
@@ -29,6 +41,7 @@ let obj={
     while(queue.length>0){
         result.push([])
         let queuelength=queue.length
+        console.log(queuelength)
         for(let i=0;i<queuelength;i++){
             result[result.length-1].push(queue[i].val)
             !!queue[i].left&&queue.push(queue[i].left)
@@ -36,9 +49,6 @@ let obj={
         }
         queue.splice(0,queuelength)
     }
-
-    
-    
     return result
 };
 levelOrder(obj)

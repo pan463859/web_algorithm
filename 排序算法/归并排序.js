@@ -17,19 +17,15 @@ eg:
 [5, 6, 7, 8,| 1, 2, 3, 4]
 [1, 2, 3, 4, 5, 6, 7, 8]
  */
-//整体思路可以理解成一个合并有序数组的算法+递归来处理
-//分割需要排序的数组,递归处理
-function mergeSort(arr) {
-    debugger
+function sortArray(arr) {
     const len = arr.length
     if (len <= 1) {
         return arr
     }
     const mid = Math.floor(len / 2)
-    let leftarr = mergeSort(arr.slice(0, mid))
-    let rightarr = mergeSort(arr.slice(mid, len))
+    let leftarr = sortArray(arr.slice(0, mid))
+    let rightarr = sortArray(arr.slice(mid, len))
     arr = mergeArr(leftarr, rightarr)
-    console.log(arr)
     return arr
 }
 //合并两个有序数组,双指针法
@@ -58,6 +54,3 @@ function mergeArr(arr1, arr2) {
         return res.concat(arr2.slice(j))
     }
 }
-
-mergeSort([8, 7, 6, 5, 4, 3, 2, 1])
-//复杂度O(nlog(n))

@@ -56,33 +56,62 @@
 
 
 
-//类动态规划
+// //类动态规划
+// var trap = function (height) {
+//     let [leftmaxar, rightmaxar] = gettMax(height)
+//     return height.reduce((sum, cur, index) => {
+//         return sum + Math.min(leftmaxar[index], rightmaxar[index]) - cur
+//     }, 0)
+// };
+// var trap = function (height) {
+//     let len = height.length;
+//     let i = 0
+//     let j
+//     let maxleft = height[0]
+//     let maxright = height[len - 1]
+//     let dpsleft = []
+//     let dpsright = []
+//     while (i < len) {
+//         j = len - 1 - i
+//         if (height[i] > maxleft) {
+//             maxleft = height[i]
+//         }
+//         if (height[j] > maxright) {
+//             maxright = height[j]
+//         }
+//         dpsright[j] = maxright
+//         dpsleft[i] = maxleft
+//         i++
+//         j--
+//     }
+//     return [dpsleft, dpsright]
+// }
+
+
+
+
+//单调递减栈
 var trap = function (height) {
-    let [leftmaxar, rightmaxar] = gettMax(height)
-    return height.reduce((sum, cur, index) => {
-        return sum + Math.min(leftmaxar[index], rightmaxar[index]) - cur
-    }, 0)
-};
-var trap = function (height) {
-    let len = height.length;
-    let i = 0
-    let j
-    let maxleft = height[0]
-    let maxright = height[len - 1]
-    let dpsleft = []
-    let dpsright = []
-    while (i < len) {
-        j = len - 1 - i
-        if (height[i] > maxleft) {
-            maxleft = height[i]
+    let stack = []
+    let i = 0;
+    let sum = 0
+    while (i < height.length) {
+        while (stack.length != 0 && height[i] > height[stack[stack.length - 1]]) {
+            //在单调栈中弹出一个元素，也就是准备要积水的元素
+            let top = stack.pop()
+            //弹出要积水的元素之后，栈里面没有了，说明就是左边没有围栏了，无法积水
+            if (stack.length == 0) {
+                break;
+            }
+            //左边界
+            let leftbarry = stack[stack.length - 1]
+            //计算积水面积，记得要减去已经计算的部分 -height[i] 
+            sum += (i - leftbarry - 1) * (Math.min(height[leftbarry], height[i]) - height[top])
         }
-        if (height[j] > maxright) {
-            maxright = height[j]
-        }
-        dpsright[j] = maxright
-        dpsleft[i] = maxleft
+        //比左边高的就要入栈，栈为空的时候也要
+        stack.push(i)
         i++
-        j--
     }
-    return [dpsleft, dpsright]
+    return sum
 }
+console.log(trap([0,1,0,2,1,0,1,3,2,1,2,1]))

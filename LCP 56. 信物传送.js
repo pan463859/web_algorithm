@@ -1,4 +1,7 @@
 var findend = function (matrix, i, j, end, magictime, hasvisited) {
+    let row = matrix.length
+    let col = matrix[0].length
+    let curoperation
     if ((i < row && i >= 0) && (j < col && j >= 0) && i == end[0] && j == end[1]) {
         return magictime
     }
@@ -8,9 +11,6 @@ var findend = function (matrix, i, j, end, magictime, hasvisited) {
         //可能的最大转换值
         return row * col
     }
-    let row = matrix.length
-    let col = matrix[0].length
-    let curoperation
     //未超出边界且未到重点之前，都可以继续走
     while (((i < row && i >= 0) && (j < col && j >= 0))) {
         curoperation = matrix[i][j]
@@ -64,3 +64,9 @@ var conveyorBelt = function (matrix, start, end) {
     let magictime = 0
     return findend(matrix, start[0], start[1], end, magictime, hasvisited)
 };
+
+conveyorBelt(
+    ["^>v>^", "^vv>>", "<^^^>", "<><v<", "^v^>>"],
+    [1, 3],
+    [1, 0]
+)

@@ -1,72 +1,35 @@
-var findend = function (matrix, i, j, end, magictime, hasvisited) {
+var conveyorBelt = function (matrix, start, end) {
+    //二维数组记录从起点到该点的最少魔法数
     let row = matrix.length
     let col = matrix[0].length
-    let curoperation
-    if ((i < row && i >= 0) && (j < col && j >= 0) && i == end[0] && j == end[1]) {
-        return magictime
+    let dp = new Array(row).fill(0).map(item => new Array(col).fill(-1))
+    function outSize(cur) {
+        let rowindex = cur[0]
+        let colindex = cur[1]
+        return !(rowindex >= 0 && colindex >= 0 && rowindex < row && colindex < col)
     }
-    if ((i < row && i >= 0) && (j < col && j >= 0) && !hasvisited[[i, j].join('')]) {
-        hasvisited[[i, j].join('')] = true
-    } else {
-        //可能的最大转换值
-        return row * col
-    }
-    //未超出边界且未到重点之前，都可以继续走
-    while (((i < row && i >= 0) && (j < col && j >= 0))) {
-        curoperation = matrix[i][j]
-        switch (curoperation) {
-            case '^':
-                i--;
-                break;
-            case '>':
-                j++;
-                break;
-            case 'v':
-                i++;
-                break;
-            case '<':
-                j--;
-                break;
+    function backTrack(prenum, cur) {
+        if (outSize(cur)) {
+            return
         }
-        //已经访问过了，需要使用魔法更改方向
-        if (hasvisited[[i, j].join('')] || !((i < row && i >= 0) && (j < col && j >= 0))) {
-            //使用魔法回到刚才的点
-            switch (curoperation) {
-                case '^':
-                    i++;
-                    break;
-                case '>':
-                    j--;
-                    break;
-                case 'v':
-                    i--;
-                    break;
-                case '<':
-                    j++;
-                    break;
-            }
-            magictime++
-            return Math.min(findend(matrix, i + 1, j, end, magictime, JSON.parse(JSON.stringify(hasvisited))),
-                findend(matrix, i - 1, j, end, magictime, JSON.parse(JSON.stringify(hasvisited))),
-                findend(matrix, i, j + 1, end, magictime, JSON.parse(JSON.stringify(hasvisited))),
-                findend(matrix, i, j - 1, end, magictime, JSON.parse(JSON.stringify(hasvisited))))
+        let curnum = dp[cur[0]][cur[1]];
+        if (curnum >= 0 && prenum >= curnum) return;
+        dp[cur[0]][cur[1]] = prenum;
+        if (cur[0] == end[0] && cur[1] == end[1]) {
+            return
         } else {
-            hasvisited[[i, j].join('')] = true
-            if (i == end[0] && j == end[1]) {
-                return magictime
-            }
+            let curDirection = matrix[cur[0]][cur[1]];
+            // 向上
+            backTrack(curDirection === '^' ? prenum : prenum + 1, [cur[0] - 1, cur[1]]);
+            // 向下
+            backTrack(curDirection === 'v' ? prenum : prenum + 1, [cur[0] + 1, cur[1]]);
+            // 向左
+            backTrack(curDirection === '<' ? prenum : prenum + 1, [cur[0], cur[1] - 1]);
+            // 向右
+            backTrack(curDirection === '>' ? prenum : prenum + 1, [cur[0], cur[1] + 1]);
         }
     }
-}
-var conveyorBelt = function (matrix, start, end) {
-    //定义一个已访问点的结合，若已经访问后再次访问，则此路不通，需要使用魔法。
-    let hasvisited = {}
-    let magictime = 0
-    return findend(matrix, start[0], start[1], end, magictime, hasvisited)
-};
 
-conveyorBelt(
-    ["^>v>^", "^vv>>", "<^^^>", "<><v<", "^v^>>"],
-    [1, 3],
-    [1, 0]
-)
+    backTrack(0, start);
+    return dp[end[0]][end[1]];
+};

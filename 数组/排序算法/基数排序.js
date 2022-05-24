@@ -58,13 +58,16 @@ function countingSortForRadix(arr, radixBase, significantDigit) {
     const buckets = new Array(radixBase).fill(0);
     //结果数组
     const res = [];
+    //根据位上的值添加到统计数组中
     for (let i = 0; i < arr.length; i++) {
         bucketsIndex = Math.floor((arr[i] / significantDigit) % radixBase)
         buckets[bucketsIndex]++;
     }
+    //累加统计数组，确认每个数的最终位置
     for (let i = 1; i < radixBase; i++) {
         buckets[i] += buckets[i - 1]
     }
+    //还原结果数组
     for (let i = arr.length - 1; i >= 0; i--) {
         bucketsIndex = Math.floor((arr[i] / significantDigit) % radixBase)
         res[--buckets[bucketsIndex]] = arr[i]

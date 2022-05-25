@@ -48,24 +48,26 @@ function preoroder(root) {
     preoroder(root.right)
 }
 //先序遍历的迭代法
+//前序遍历，所有的右子树要等左子树遍历结束才去遍历
+//但是很多左子树按照顺序会先遇到，所以考虑先进后出的数据结构
 function preorderTraversal(root) {
+    //使用栈保证顺序
     const result = []
-    //利用栈来辅助得到结果
     const stack = []
     if (!root) {
         return result
     }
     stack.push(root)
     while (stack.length) {
+        //获取队头节点
         const cur = stack.pop()
         result.push(cur.val)
-        //栈后进先出，所先把所有的右子树入栈
+        //栈后进先出，先进后出，所有右子树先进，左子树后进
         cur.right && stack.push(cur.right)
-        cur.lef && stack.push(cur.left)
+        cur.left && stack.push(cur.left)
     }
     return result
 }
-
 
 // 中序遍历
 function inorder(root) {

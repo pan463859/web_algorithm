@@ -82,29 +82,32 @@ function inorder(root) {
     inorder(root.right)
 }
 //中序遍历的迭代法
-function inorderTraversal(root) {
+//中序遍历，还是用栈来解决的话
+//中序遍历，需要先左子树，再父节点，再右子树
+//那么应该就是要所有左子树先进栈再是所有父节点进栈，最后是右子树进栈
+//然后依次出栈就可以完成二叉树的中序遍历
+var inorderTraversal = function (root) {
     if (!root) {
-        return [];
+        return []
     }
-
-    const result = [];
-    const stack = [];
-
-    while (root !== null || stack.length > 0) {
-        //把所有的左子树按照层级放进stach中
-
-        while (root) {
+    let res = []
+    let stack = []
+    while (root != null || stack.length > 0) {
+        //先把所有的左子树推入栈中
+        while (!!root) {
+            //处理中间节点，直接先进去
             stack.push(root);
             root = root.left;
         }
-
-        const pop = stack.pop();
-        result.push(pop.val);
-        root = pop.right;
+        //取出当前左子节点，放入结果数组，然后看一下这个节点有没有兄弟节点
+        const curnode = stack.pop()
+        res.push(curnode.val)
+        //当前左节点对应的右节点，需要遍历右节点，优先去输出它的子节点里面的左节点
+        root = curnode.right
     }
-
-    return result;
+    return res
 };
+
 
 //后序遍历
 function postorder(root) {
@@ -120,21 +123,27 @@ function postorder(root) {
     // 输出当前遍历的结点值
     console.log('后序遍历 当前遍历的结点值是：', root.val)
 }
-//后序遍历的迭代法
-//后序遍历就是前序遍历的一个逆序
-//
-function preorderTraversal(root) {
-    const res = [], stack = []
+//后序遍历的顺序是左-右-父，使用辅助栈
+var postorderTraversal = function (root) {
+    if (!root) {
+        return []
+    }
+    const res = []
+    const stack = []
     while (root || stack.length) {
+        //中间节点使用 unshift 处理，相当于最后下进入结果数组
         res.unshift(root.val)
         root.left && stack.push(root.left)
+
+
+
+        //使用 unshift 处理，相当于最后下进入结果数组,所以先处理 right，才能让结果正确
         root.right && stack.push(root.right)
+
         root = stack.pop()
     }
     return res
-}
-// inorder(root)
-postorder(root)
-// preoroder(root)
+};
+
 
 

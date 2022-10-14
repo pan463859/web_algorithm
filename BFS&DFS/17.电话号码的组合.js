@@ -25,66 +25,103 @@
  */
 
 // DFS 解法
+// const letterCombinations = (digits) => {
+//   const numbermap = {
+//     1: "",
+//     2: "abc",
+//     3: "def",
+//     4: "ghi",
+//     5: "jkl",
+//     6: "mno",
+//     7: "pqrs",
+//     8: "tuv",
+//     9: "wxyz",
+//   };
+//   if (digits.length == 0) return [];
+//   const res = [];
+//   const dfs = (tempstr, i) => {
+//     if (i == digits.length) {
+//       // 位置都坐满了，推入结果数组
+//       res.push(tempstr);
+//       return;
+//     }
+//     // 找到当前数字对应的所有字母，遍历添加
+//     const letters = numbermap[digits[i]];
+//     for (const letter of letters) {
+//       // for 循环递归拼接字符串
+//       dfs(tempstr + letter, i + 1);
+//     }
+//   };
+//   dfs("", 0);
+//   return res;
+// };
+
+// // BFS
+
+// const letterCombinations = (digits) => {
+//   const numbermap = {
+//     1: "",
+//     2: "abc",
+//     3: "def",
+//     4: "ghi",
+//     5: "jkl",
+//     6: "mno",
+//     7: "pqrs",
+//     8: "tuv",
+//     9: "wxyz",
+//   };
+//   if (digits.length == 0) return [];
+//   digits.split("").map((item) => numbermap[item].split(""));
+//   const queue = [];
+//   queue.push("");
+//   while (queue.length) {
+//     for (let i = 0; i < digits.length; i++) {
+//       const levelSize = queue.length;
+//       for (let j = 0; j < levelSize; j++) {
+//         const curStr = queue.shift();
+//         const letters = map[digits[i]];
+//         for (const l of letters) {
+//           queue.push(curStr + l);
+//         }
+//       }
+//     }
+//     return queue; //队里中剩余的就是结果数组
+//   }
+// };
+
+
+
 const letterCombinations = (digits) => {
+  let res = []
   const numbermap = {
-    1: "",
-    2: "abc",
-    3: "def",
-    4: "ghi",
-    5: "jkl",
-    6: "mno",
-    7: "pqrs",
-    8: "tuv",
-    9: "wxyz",
+      1: "",
+      2: "abc",
+      3: "def",
+      4: "ghi",
+      5: "jkl",
+      6: "mno",
+      7: "pqrs",
+      8: "tuv",
+      9: "wxyz",
   };
   if (digits.length == 0) return [];
-  const res = [];
-  const dfs = (tempstr, i) => {
-    if (i == digits.length) {
-      // 位置都坐满了，推入结果数组
-      res.push(tempstr);
-      return;
-    }
-    // 找到当前数字对应的所有字母，遍历添加
-    const letters = numbermap[digits[i]];
-    for (const letter of letters) {
-      // for 循环递归拼接字符串
-      dfs(tempstr + letter, i + 1);
-    }
-  };
-  dfs("", 0);
-  return res;
-};
-
-// BFS
-
-const letterCombinations = (digits) => {
-  const numbermap = {
-    1: "",
-    2: "abc",
-    3: "def",
-    4: "ghi",
-    5: "jkl",
-    6: "mno",
-    7: "pqrs",
-    8: "tuv",
-    9: "wxyz",
-  };
-  if (digits.length == 0) return [];
-  digits.split("").map((item) => numbermap[item].split(""));
-  const queue = [];
-  queue.push("");
-  while (queue.length) {
-    for (let i = 0; i < digits.length; i++) {
-      const levelSize = queue.length;
-      for (let j = 0; j < levelSize; j++) {
-        const curStr = queue.shift();
-        const letters = map[digits[i]];
-        for (const l of letters) {
-          queue.push(curStr + l);
-        }
+  //  得到
+  digits = digits.split("").map((item) => numbermap[item].split(""));
+  const findLeaf = (digits, curlevel, temp) => {
+      if (temp == digits.length) { return }
+      if (temp.length == digits.length) {
+          res.push(temp)
+          return
       }
-    }
-    return queue; //队里中剩余的就是结果数组
+      for (let i = 0; i < digits[curlevel].length; i++) {
+          temp += digits[curlevel][i]
+          findLeaf(digits, curlevel + 1, temp)
+          temp = temp.substring(0, temp.length - 1)
+      }
+
   }
-};
+  findLeaf(digits, 0, '')
+  console.log(res)
+  return res
+}
+letterCombinations('23')

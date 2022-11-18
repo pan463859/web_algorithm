@@ -6,28 +6,45 @@
  * @param {*} one 
  * @returns 
  * 
- * 给你整数 zero ，one ，low 和 high ，我们从空字符串开始构造一个字符串，每一步执行下面操作中的一种：
+ 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 nums 的 子数组 中满足 元素最小公倍数为 k 的子数组数目。
 
-将 '0' 在字符串末尾添加 zero  次。
-将 '1' 在字符串末尾添加 one 次。
-以上操作可以执行任意次。
+子数组 是数组中一个连续非空的元素序列。
 
-如果通过以上过程得到一个 长度 在 low 和 high 之间（包含上下边界）的字符串，那么这个字符串我们称为 好 字符串。
+数组的最小公倍数 是可被所有数组元素整除的最小正整数。
+输入：nums = [3,6,2,7,1], k = 6
+输出：4
+解释：以 6 为最小公倍数的子数组是：
+- [3,6,2,7,1]
+- [3,6,2,7,1]
+- [3,6,2,7,1]
+- [3,6,2,7,1]
 
-请你返回满足以上要求的 不同 好字符串数目。由于答案可能很大，请将结果对 109 + 7 取余 后返回。
- */
-
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/number-of-subarrays-with-lcm-equal-to-k
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+*/
 
 // 爬楼梯变形，从 1 到 low 给出dp 值 最后累加 low 到 high 的 dp 即可求到答案
-var countGoodStrings = function (low, high, zero, one) {
-    let dp = Array(high + 1).fill(0)
-    dp[0] = 1
-    let mod = 1e9 + 7, ans = 0
-    for (let i = 0; i <= high; i++) {
-        if (i >= zero) dp[i] += dp[i - zero]
-        if (i >= one) dp[i] += dp[i - one]
-        dp[i] %= mod
-        if (i >= low) ans = (ans + dp[i]) % mod
+var subarrayLCM = function (nums, k) {
+    let cnt = 0
+    const len = nums.length;
+
+    // 求最大公因数
+    const getGCD = (a, b) => {
+        if (b == 0) return a;
+        return getGCD(b, a % b);
+    };
+    // 求最小公倍数
+    const getLCM = (a, b) => a * b / getGCD(a, b);
+
+    for (let i = 0; i < len; i++) {
+        if (k % nums[i]) continue; // 提前剪枝
+        let lcm = nums[i];
+        for (let j = i; j < len; j++) {
+            if (k % nums[j]) break;
+            lcm = getLCM(lcm, nums[j]);
+            if (lcm === k) cnt += 1;
+        }
     }
-    return ans
+    return cnt;
 };

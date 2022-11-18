@@ -23,39 +23,16 @@
  * @param {*} one 
  * @returns 
  */
-/**
- * @param {number} low
- * @param {number} high
- * @param {number} zero
- * @param {number} one
- * @return {number}
- */
-const getDeep = (i, curlength, res, zero, one) => {
-    if (curlength == i) {
-        res.num = (res.num + 1) % (Math.pow(10, 9) + 7)
-        return
+// 爬楼梯变形，从 1 到 low 给出dp 值 最后累加 low 到 high 的 dp 即可求到答案
+ var countGoodStrings = function (low, high, zero, one) {
+    let dp = Array(high + 1).fill(0)
+    dp[0] = 1
+    let mod = 1e9 + 7, ans = 0
+    for (let i = 0; i <= high; i++) {
+        if (i >= zero) dp[i] += dp[i - zero]
+        if (i >= one) dp[i] += dp[i - one]
+        dp[i] %= mod
+        if (i >= low) ans = (ans + dp[i]) % mod
     }
-    if (curlength > i) {
-        return
-    }
-    curlength = curlength + zero
-    getDeep(i, curlength, res, zero, one)
-    curlength = curlength - zero + one
-    getDeep(i, curlength, res, zero, one)
-
-}
-var countGoodStrings = function (low, high, zero, one) {
-    let i = low
-    let res = { num: 0 }
-    let maxzero = 0
-    let maxheight = 0
-    const maxzero = low % zero
-    const maxone = (low / zero) % one
-    while (i <= high) {
-        let curlength = 0
-        getDeep(i, curlength, res, zero, one)
-        i++
-    }
-    return res.num % (Math.pow(10, 9) + 7)
+    return ans
 };
-countGoodStrings(200, 200, 10, 1)

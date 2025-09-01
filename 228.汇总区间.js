@@ -19,6 +19,8 @@ var summaryRanges = function (nums) {
             temp.push(nums[i])
             continue
         }
+        
+        
         // 判断当前是否连续
         if (nums[i] == (temp[temp.length - 1] + 1)) {
             // 更新区间的右区间
